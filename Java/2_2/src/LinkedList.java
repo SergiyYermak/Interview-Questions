@@ -85,6 +85,11 @@ public class LinkedList {
         }
         return count;
     }
+    /*
+    This might be a worst solution than counting. Because we get to the end of the list, then walk all the way back.
+    Regardless of what k is we will walk all the way back. Furthermore, all the calls to the returnKthToLast are
+    put on the execution stack. While counting only puts one call.
+     */
     public static void main(String[] args)
     {
         LinkedList list = new LinkedList();
