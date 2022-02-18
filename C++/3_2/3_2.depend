@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1645190625 source:c:\users\sergiyyermak\desktop\cs projects\interview-questions\c++\3_2\main.cpp
+	<iostream>
+	"myStack.h"
+
+1645191122 c:\users\sergiyyermak\desktop\cs projects\interview-questions\c++\3_2\mystack.h
+	<iostream>
+	<cassert>
+	"stackADT.h"
+
+1645189885 c:\users\sergiyyermak\desktop\cs projects\interview-questions\c++\3_2\stackadt.h
+
