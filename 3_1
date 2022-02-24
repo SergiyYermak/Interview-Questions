@@ -1,0 +1,17 @@
+#3.1  Three in One: Describe how you could use a single array to implement three stacks.
+
+One simple way is designate each stack a working area within the array.
+I like to think of  small example first before making a general case.
+Say our N = 9, stack one would get [0-2], stack two get [3-5], and stack three gets [6-8].
+So, stack one top starts at 0, stack two top starts at 3, and stack three top starts at 6.
+Now the general case.
+First stack operates between [0 - N/3), stackTop_1 = 0.
+Second stack operates between [N/3 - 2N/3), stackTop_2 = N/3.
+Third stack operates between [2N/3 - N), stackTop_3 = 2N/3.
+Each stack would also require a stackLimit variable to 
+which we can compare the stackTop to when inserting.
+Possibly also a stackMin variable for deleting.
+Maybe also a resize function for when we hit the limit.
+This function would work like it does for arrays, doubling the N
+and copying elements. New stackTop, stackLimit, and stackMin would
+have to be recalculated.
