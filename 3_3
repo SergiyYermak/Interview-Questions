@@ -7,118 +7,118 @@ SetOfStacks. push() and SetOfStacks. pop() should behave identically to a single
 (that is, pop () should return the same values as it would if there were just a single stack).
 
 Questions: 	Does pop() refer to a specific stack or the last pushed plate?
-			Does it matter how to stack is implemmented (array/linked list)?
+		Does it matter how to stack is implemmented (array/linked list)?
 			
 Initial thoughts: 	If the SetOfStacks is a 2D array, then we would just need some
-					variables to keep track of. index, stack number, threshold, number of stacks.
-					stackNumber = 0, index = 0; threshold = 5; numberOfStacks = 5;
-					Type [][] SetOfStacks;
-					SetOfStacks = new Type[numberOfStacks][threshold];
-					
-					push(Type item){
-						if(index < threshold){
-							SetOfStacks[stackNumber][index] = item;
-							index++;
+			variables to keep track of. index, stack number, threshold, number of stacks.
+			stackNumber = 0, index = 0; threshold = 5; numberOfStacks = 5;
+			Type [][] SetOfStacks;
+			SetOfStacks = new Type[numberOfStacks][threshold];
+
+			push(Type item){
+				if(index < threshold){
+					SetOfStacks[stackNumber][index] = item;
+					index++;
+				}
+				else{
+					stackNumber++;
+					index = 0;
+					if(stackNumber < numberOfStacks) {
+						SetOfStacks[stackNumber][index] = item;
+						index++;
+					}
+					else
+						cout << "All stacks are full" << endl;
+				}
+			}
+			pop() {
+				Type result;
+				if(index == 0 && stackNumber == 0){ //no items have been pushed
+					cout << "Stacks are empty";
+				} else{
+					if(index == 0){ //start of a new stack, pop from last stack
+					result = SetOfStacks[stackNumber - 1][threshold - 1];
+					stackNumber--;
+					index = threshold - 1;
+					} else{
+						result = SetOfStacks[stackNumber][index - 1];
+						index--;
 						}
-						else{
-							stackNumber++;
-							index = 0;
-							if(stackNumber < numberOfStacks) {
-								SetOfStacks[stackNumber][index] = item;
-								index++;
-							}
-							else
-								cout << "All stacks are full" << endl;
+				}
+				return result;
+			}
+
+			This solution however does not account for poping of a specific stack.
+			Furthermore, if we pop from a specific stack, do we put the head item
+			of the next stack on top? It would be easier to just leave it, but
+			that creates problems as well. Like assumtions that push() pushes
+			on the last availabe stack and all other stacks are full. Leaving it
+			also opens the door to a push(int stackNumber) implementation.
+
+			Promblem with specifing stackNumber now becomes, how do we track each
+			stack top index without having number of indecies = the number of stacks.
+
+			If we implement the stack as a linked list then during a push we could
+			count from the head. At the last !null node, we check the count, and if
+			it equals threshold, the stack is full. In the worst case, this would mean
+			that push is O(threshold) runtime. What this means for pop() is simply
+			checking that the head of that stack is !null and poping the next node
+			with next == null. Each stack can be put in a single array size of numberOfStacks.
+			One question, when passing stackNumber, when accessing the first stack
+			is it 0 or 1? (I will assume user passes 0).
+
+			Node[] SetOfStacks;
+			SetOfStacks = new Node[numberOfStacks];
+
+			push(int stackNumber, Type item) {
+				if(stackNumber < 0 && stackNumber >= numberOfStacks) {
+					cout << "Stack number provided is out of bounds" << endl;
+				} else {
+					int count = 1;
+					Node head = SetOfStacks[stackNumber];
+					if(head.data = nullptr){//stack is empty
+						Node newNode = new Node(item);
+						SetOfStacks[stackNumber] = newNode;
+					} else {
+						while(head.next != nullptr) {
+						head = head.next;
+						count++;
+						}
+						if(count < threshold) { //there is room on the stack
+							Node newNode = new Node(item);
+							head.next = newNode;
+						}
+						else {
+							cout << "Stack specified is full" << endl;
 						}
 					}
-					pop() {
-						Type result;
-						if(index == 0 && stackNumber == 0){ //no items have been pushed
-							cout << "Stacks are empty";
-						} else{
-							if(index == 0){ //start of a new stack, pop from last stack
-							result = SetOfStacks[stackNumber - 1][threshold - 1];
-							stackNumber--;
-							index = threshold - 1;
-							} else{
-								result = SetOfStacks[stackNumber][index - 1];
-								index--;
-								}
+				}
+			}
+			pop(int stackNumber) {
+				Node result = new Node();
+				if(stackNumber < 0 && stackNumber >= numberOfStacks) {
+					cout << "Stack number provided is out of bounds" << endl;
+				} else {
+					if(SetOfStacks[stackNumber].data == nullptr) { //head is empty
+						cout << "Stack specified is empty" << endl;
+					} else {
+						Node top = SetOfStacks[stackNumber];
+						while(top.next != nullptr) {
+							top = top.next;
 						}
-						return result;
+						result = top;
+						top.data = nullptr;
 					}
-					
-					This solution however does not account for poping of a specific stack.
-					Furthermore, if we pop from a specific stack, do we put the head item
-					of the next stack on top? It would be easier to just leave it, but
-					that creates problems as well. Like assumtions that push() pushes
-					on the last availabe stack and all other stacks are full. Leaving it
-					also opens the door to a push(int stackNumber) implementation.
-					
-					Promblem with specifing stackNumber now becomes, how do we track each
-					stack top index without having number of indecies = the number of stacks.
-					
-					If we implement the stack as a linked list then during a push we could
-					count from the head. At the last !null node, we check the count, and if
-					it equals threshold, the stack is full. In the worst case, this would mean
-					that push is O(threshold) runtime. What this means for pop() is simply
-					checking that the head of that stack is !null and poping the next node
-					with next == null. Each stack can be put in a single array size of numberOfStacks.
-					One question, when passing stackNumber, when accessing the first stack
-					is it 0 or 1? (I will assume user passes 0).
-					
-					Node[] SetOfStacks;
-					SetOfStacks = new Node[numberOfStacks];
-					
-					push(int stackNumber, Type item) {
-						if(stackNumber < 0 && stackNumber >= numberOfStacks) {
-							cout << "Stack number provided is out of bounds" << endl;
-						} else {
-							int count = 1;
-							Node head = SetOfStacks[stackNumber];
-							if(head.data = nullptr){//stack is empty
-								Node newNode = new Node(item);
-								SetOfStacks[stackNumber] = newNode;
-							} else {
-								while(head.next != nullptr) {
-								head = head.next;
-								count++;
-								}
-								if(count < threshold) { //there is room on the stack
-									Node newNode = new Node(item);
-									head.next = newNode;
-								}
-								else {
-									cout << "Stack specified is full" << endl;
-								}
-							}
-						}
-					}
-					pop(int stackNumber) {
-						Node result = new Node();
-						if(stackNumber < 0 && stackNumber >= numberOfStacks) {
-							cout << "Stack number provided is out of bounds" << endl;
-						} else {
-							if(SetOfStacks[stackNumber].data == nullptr) { //head is empty
-								cout << "Stack specified is empty" << endl;
-							} else {
-								Node top = SetOfStacks[stackNumber];
-								while(top.next != nullptr) {
-									top = top.next;
-								}
-								result = top;
-								top.data = nullptr;
-							}
-						}
-						return result;
-					}
-					
-					Last thoughts, the question didn't specify that there is a set number stacks.
-					Simply if stack gets too big we make a new one. To accomidate for this,
-					rather then having an array of stacks, just hava a stack of stacks.
-					Similar to the previous solution, when specifing which stack to push onto or pop
-					from, we count from the head of the parent stack. This is probably the best
-					solution.
+				}
+				return result;
+			}
+
+			Last thoughts, the question didn't specify that there is a set number stacks.
+			Simply if stack gets too big we make a new one. To accomidate for this,
+			rather then having an array of stacks, just hava a stack of stacks.
+			Similar to the previous solution, when specifing which stack to push onto or pop
+			from, we count from the head of the parent stack. This is probably the best
+			solution.
 					
 					
 					
